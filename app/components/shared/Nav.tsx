@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import logo from "../../../public/logoSvg.svg";
+import logo from "../../../public/main/logoSvg.svg";
 import Image from "next/image";
 import SearchBar from "./SearchBar";
 import MenuIcon from "@mui/icons-material/Menu";
 import { usePathname } from "next/navigation";
+import ThemeToggle from "../theme/ThemeToggle";
+import Logo from "./Logo";
 
 export default function Nav() {
   const [navModal, setNavModal] = useState(false);
@@ -14,65 +16,92 @@ export default function Nav() {
   const pathname = usePathname();
   const hideSearch = pathname === "/login" || pathname === "/register";
 
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
+        setNavModal(false);
+      }
+    }
+
+    if (navModal) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [navModal]);
+
   return (
     <>
       {/* Desktop Nav */}
       <nav
-        className="fixed w-5/6 hidden md:flex z-50 top-5 left-1/2 -translate-x-1/2 
-      text-black font-serif items-center justify-between bg-black/10 backdrop-blur-lg rounded-xl px-6"
+        className="fixed hidden md:flex z-50 items-center w-full 
+       px-5 py-2 gap-3 bg-background border-b border-border shadow-sm transition-colors duration-200"
       >
-        <div className="logo shrink-0 cursor-pointer origin-top-center duration-500 hover:scale-110 hover:animate-swing">
-          <Link href={"/"}>
-            <Image src={logo} alt="Logo" width={100} height={100} />
+        <div className="shrink-0 cursor-pointer mr-auto">
+          <Link href="/">
+            <Image
+              src={logo}
+              alt="Logo"
+              width={80}
+              height={80}
+              className="hover:animate-swing"
+            />
+            {/* <Logo /> */}
           </Link>
         </div>
 
         {!hideSearch && <SearchBar />}
 
-        <ul className="flex gap-6">
-          <li>
-            <Link
-              href="/products"
-              className="transition-all rounded-xl border-2 border-black p-1 duration-300 hover:scale-105 hover:bg-black hover:text-white inline-block"
-            >
-              Products
-            </Link>
-          </li>
+        <Link
+          href="/products"
+          className="text-sm font-medium tracking-widest uppercase text-foreground hover:text-muted-foreground transition-colors duration-200"
+        >
+          Products
+        </Link>
 
-          <li>
-            <Link
-              href="/contact"
-              className="transition-all rounded-xl border-2 border-black p-1 duration-300 hover:scale-105 hover:bg-black hover:text-white inline-block"
-            >
-              Contact
-            </Link>
-          </li>
+        <Link
+          href="/contact"
+          className="text-sm font-medium tracking-widest uppercase text-foreground hover:text-muted-foreground transition-colors duration-200"
+        >
+          Contact
+        </Link>
 
-          <li>
-            <Link
-              href="/login"
-              className="transition-all bg-black text-white rounded-xl border-2 border-black p-1 duration-300 hover:scale-105 hover:bg-white/1 hover:text-black inline-block"
-            >
-              Login
-            </Link>
-          </li>
+        <div className="w-px h-5 bg-border mx-1" />
 
-          <li>
-            <Link
-              href="/register"
-              className="transition-all bg-black text-white rounded-xl border-2 border-black p-1 duration-300 hover:scale-105 hover:bg-white/1 hover:text-black inline-block"
-            >
-              Register
-            </Link>
-          </li>
-        </ul>
+        <Link
+          href="/login"
+          className="text-sm font-semibold tracking-widest uppercase border border-border px-4 py-1.5 text-foreground hover:bg-primary hover:text-primary-foreground transition-colors duration-200 rounded-md"
+        >
+          Login
+        </Link>
+
+        <Link
+          href="/register"
+          className="text-sm font-semibold tracking-widest uppercase bg-primary text-primary-foreground border border-primary px-4 py-1.5 hover:opacity-90 transition-opacity duration-200 rounded-md"
+        >
+          Register
+        </Link>
+
+        <ThemeToggle />
       </nav>
 
       {/* Mobile Nav */}
-      <nav className="md:hidden flex justify-between absolute z-50 top-5 left-1/2 -translate-x-1/2 text-black font-serif items-center w-4/5">
-        <div className="logo shrink-0 cursor-pointer origin-top-center duration-500 hover:scale-110 hover:animate-swing">
-          <Link href={"/"}>
-            <Image src={logo} alt="Logo" width={70} height={70} />
+      <nav
+        className="md:hidden fixed py-8 z-50 top-0 left-0 right-0 flex 
+      justify-between items-center h-[52px] px-4 bg-background border-b border-border transition-colors duration-200 shadow-sm"
+      >
+        <div className="shrink-0 cursor-pointer">
+          <Link href="/">
+            <Image src={logo} alt="Logo" width={60} height={60} />
           </Link>
         </div>
 
@@ -80,31 +109,28 @@ export default function Nav() {
 
         <button
           onClick={() => setNavModal((prev) => !prev)}
-          className="transition-all bg-black text-white p-2 rounded-xl duration-300 hover:scale-105 hover:text-black/80"
+          className="cursor-pointer bg-primary text-primary-foreground p-1.5 hover:opacity-80 transition-opacity duration-200 rounded-md"
         >
-          <MenuIcon />
+          <MenuIcon fontSize="small" />
         </button>
       </nav>
 
-      {/* Modal */}
+      {/* Mobile Modal */}
       {navModal && (
-        <div
-          className="fixed top-0 left-0 bottom-0 right-0 z-9999 
-        backdrop-blur-md bg-black/30 flex items-center justify-center"
-        >
+        <div className="fixed inset-0 z-[9999] backdrop-blur-md bg-background/80 flex items-center justify-center transition-all duration-300">
           <button
-            className="absolute top-10 right-10 text-6xl text-black transition-all duration-300 hover:scale-105 hover:text-black/80"
-            onClick={() => setNavModal(!navModal)}
+            className="absolute cursor-pointer top-8 right-8 text-5xl text-foreground hover:text-muted-foreground transition-colors duration-200"
+            onClick={() => setNavModal(false)}
           >
             ×
           </button>
 
-          <div className="bg-white text-black font-serif p-15 rounded-xl shadow-lg">
-            <ul className="flex flex-col gap-5 text-2xl text-center">
+          <div className="bg-background border border-border shadow-2xl rounded-2xl p-12" ref={modalRef}>
+            <ul className="flex flex-col gap-6 text-center">
               <li>
                 <Link
                   href="/products"
-                  className="transition-all duration-300 hover:scale-105 hover:text-black/80 inline-block"
+                  className="text-sm text-foreground font-medium tracking-[0.15em] uppercase hover:text-muted-foreground transition-colors duration-200"
                   onClick={() => setNavModal(false)}
                 >
                   Products
@@ -114,17 +140,19 @@ export default function Nav() {
               <li>
                 <Link
                   href="/contact"
-                  className="transition-all duration-300 hover:scale-105 hover:text-black/80 inline-block"
+                  className="text-sm text-foreground font-medium tracking-[0.15em] uppercase hover:text-muted-foreground transition-colors duration-200"
                   onClick={() => setNavModal(false)}
                 >
                   Contact
                 </Link>
               </li>
 
+              <div className="w-full h-px bg-border" />
+
               <li>
                 <Link
                   href="/login"
-                  className="transition-all bg-black text-white px-6 py-2 rounded-xl duration-300 hover:scale-105 hover:text-black/80 inline-block"
+                  className="text-sm font-semibold tracking-[0.15em] uppercase border border-border px-10 py-2.5 text-foreground hover:bg-primary hover:text-primary-foreground transition-colors duration-200 inline-block rounded-md"
                   onClick={() => setNavModal(false)}
                 >
                   Login
@@ -134,11 +162,15 @@ export default function Nav() {
               <li>
                 <Link
                   href="/register"
-                  className="transition-all bg-black text-white px-6 py-2 rounded-xl duration-300 hover:scale-105 hover:text-black/80 inline-block"
+                  className="text-sm font-semibold tracking-[0.15em] uppercase bg-primary text-primary-foreground border border-primary px-10 py-2.5 hover:opacity-90 transition-opacity duration-200 inline-block rounded-md"
                   onClick={() => setNavModal(false)}
                 >
                   Register
                 </Link>
+              </li>
+
+              <li>
+                <ThemeToggle />
               </li>
             </ul>
           </div>

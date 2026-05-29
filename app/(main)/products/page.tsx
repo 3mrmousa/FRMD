@@ -1,5 +1,3 @@
-// app/products/page.tsx
-
 import ProductAccordion from "@/app/components/products/ProductAccordion";
 
 export default function ProductsPage() {

@@ -15,6 +15,9 @@ import sweetShirt7 from "@/public/sweet-shirts/bs2.png";
 import sweetShirt8 from "@/public/sweet-shirts/bs3.png";
 import sweetShirt9 from "@/public/sweet-shirts/bs4.png";
 import sweetShirt10 from "@/public/sweet-shirts/bs5.png";
+import { Rating } from "@mui/material";
+import StarIcon from "@mui/icons-material/Star";
+import Link from "next/link";
 
 type Product = {
   id: string;
@@ -23,6 +26,7 @@ type Product = {
   collection: "Drop 01" | "Drop 02" | "Ongoing";
   category: "Shirts" | "Sweatshirts";
   image: StaticImageData;
+  stars: number;
 };
 
 const products: Product[] = [
@@ -33,6 +37,7 @@ const products: Product[] = [
     collection: "Drop 01",
     category: "Sweatshirts",
     image: sweetShirt6,
+    stars: 4,
   },
   {
     id: "02",
@@ -41,6 +46,7 @@ const products: Product[] = [
     collection: "Drop 02",
     category: "Sweatshirts",
     image: sweetShirt7,
+    stars: 5,
   },
   {
     id: "03",
@@ -49,6 +55,7 @@ const products: Product[] = [
     collection: "Ongoing",
     category: "Sweatshirts",
     image: sweetShirt8,
+    stars: 4,
   },
   {
     id: "04",
@@ -57,6 +64,7 @@ const products: Product[] = [
     collection: "Drop 01",
     category: "Sweatshirts",
     image: sweetShirt9,
+    stars: 3,
   },
   {
     id: "05",
@@ -65,6 +73,7 @@ const products: Product[] = [
     collection: "Drop 01",
     category: "Sweatshirts",
     image: sweetShirt10,
+    stars: 4,
   },
   {
     id: "06",
@@ -73,6 +82,7 @@ const products: Product[] = [
     collection: "Drop 02",
     category: "Shirts",
     image: sweetShirt1,
+    stars: 4,
   },
   {
     id: "07",
@@ -81,6 +91,7 @@ const products: Product[] = [
     collection: "Ongoing",
     category: "Shirts",
     image: sweetShirt2,
+    stars: 5,
   },
   {
     id: "08",
@@ -89,6 +100,7 @@ const products: Product[] = [
     collection: "Drop 01",
     category: "Shirts",
     image: sweetShirt3,
+    stars: 5,
   },
   {
     id: "09",
@@ -97,6 +109,7 @@ const products: Product[] = [
     collection: "Drop 01",
     category: "Shirts",
     image: sweetShirt4,
+    stars: 4,
   },
   {
     id: "10",
@@ -105,6 +118,7 @@ const products: Product[] = [
     collection: "Drop 01",
     category: "Shirts",
     image: sweetShirt5,
+    stars: 4,
   },
 ];
 
@@ -131,42 +145,88 @@ function ProductCard({
 }) {
   return (
     <article
-      className={`group relative overflow-hidden rounded-2xl bg-neutral-100 ${className}`}
+      className={`group relative overflow-hidden rounded-2xl bg-neutral-100 dark:bg-white/15 ${className}`}
     >
-      <Image
-        src={product.image}
-        alt={product.name}
-        fill
-        placeholder="blur"
-        sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 30vw"
-        className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
-      />
+      <Link href={`/products/${product.id}`}>
+        <Image
+          src={product.image}
+          alt={product.name}
+          fill
+          placeholder="blur"
+          sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 30vw"
+          className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+        />
 
-      <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
 
-      <div className="absolute left-4 text-black top-4 rounded-full bg-white/15 px-3 py-1 text-[10px] uppercase tracking-[0.18em] backdrop-blur-sm">
-        {product.category}
-      </div>
+        <div className="absolute left-4 text-black top-4 rounded-full bg-white/15 px-3 py-1 text-[10px] uppercase tracking-[0.18em] backdrop-blur-sm">
+          {product.category}
+        </div>
 
-      <div className="absolute bottom-4 left-4 right-4">
-        <p className="text-[10px] uppercase tracking-[0.18em] text-white/70">
-          {product.id} · {product.collection}
-        </p>
-
-        <div
-          className={`transition-opacity duration-300 ${
-            compact ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-          }`}
-        >
-          <h3
-            className={`mt-1 font-bold tracking-tight text-white ${
-              compact ? "text-lg" : "text-2xl"
+        <div className="absolute bottom-4 left-4">
+          <Rating
+            name="text-feedback"
+            value={product.stars}
+            readOnly
+            precision={0.5}
+            emptyIcon={
+              <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
+            }
+          />
+          <div
+            className={`transition-opacity duration-300 ${
+              compact ? "opacity-100" : "opacity-0 group-hover:opacity-100"
             }`}
           >
-            {product.name}
-          </h3>
-          <p className="text-sm text-white/80">{formatPrice(product.price)}</p>
+            <h3
+              className={`mt-1 font-bold tracking-tight text-white ${
+                compact ? "text-lg" : "text-2xl"
+              }`}
+            >
+              {product.name}
+            </h3>
+            <p className="font-semibold text-white/80">{formatPrice(product.price)}</p>
+          </div>
         </div>
+      </Link>
+
+      <div
+        className={`absolute bottom-4 right-4 flex items-center gap-3 
+          transition-opacity duration-300 ${
+            compact ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+          }`}
+      >
+        {/* Cart */}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="white"
+          className="w-6 h-6 hover:text-blue-500 cursor-pointer"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.8}
+            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.5 6h13M7 13L5.4 5M16 19a1 1 0 100 2 1 1 0 000-2zm-8 0a1 1 0 100 2 1 1 0 000-2z"
+          />
+        </svg>
+
+        {/* Wishlist */}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="white"
+          className="w-6 h-6 hover:text-red-500 cursor-pointer"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.8}
+            d="M20.8 4.6c-1.7-1.7-4.4-1.7-6.1 0L12 7.3 9.3 4.6C7.6 2.9 4.9 2.9 3.2 4.6s-1.7 4.4 0 6.1L12 19.5l8.8-8.8c1.7-1.7 1.7-4.4 0-6.1z"
+          />
+        </svg>
       </div>
     </article>
   );
@@ -174,19 +234,28 @@ function ProductCard({
 
 export default function ProductAccordion() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedStars, setSelectedStars] = useState<number[]>([]);
 
+  const stars = [5, 4, 3, 2, 1];
   const categories = useMemo(
     () => [...new Set(products.map((product) => product.category))],
     [],
   );
 
   const filteredProducts = useMemo(() => {
-    if (selectedCategories.length === 0) return products;
+    if (selectedCategories.length === 0 && selectedStars.length === 0)
+      return products;
 
-    return products.filter((product) =>
-      selectedCategories.includes(product.category),
-    );
-  }, [selectedCategories]);
+    return products.filter((product) => {
+      const starsFilter =
+        selectedStars.length === 0 || selectedStars.includes(product.stars);
+      const categoriesFilter =
+        selectedCategories.length === 0 ||
+        selectedCategories.includes(product.category);
+
+      return starsFilter && categoriesFilter;
+    });
+  }, [selectedCategories, selectedStars]);
 
   const desktopRows = useMemo(
     () => chunkArray(filteredProducts, 3),
@@ -199,17 +268,20 @@ export default function ProductAccordion() {
         <Filter
           categories={categories}
           selectedCategories={selectedCategories}
-          onChange={setSelectedCategories}
+          onChangeCategories={setSelectedCategories}
+          stars={stars}
+          selectedStars={selectedStars}
+          onChangeStars={setSelectedStars}
         />
       </div>
 
       <main className="lg:col-span-4">
         <div className="mb-5 flex items-center justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight text-black">
+            <h2 className="text-2xl font-bold tracking-tight text-black dark:text-white">
               Products
             </h2>
-            <p className="text-sm text-black/60">
+            <p className="text-sm text-black/60 dark:text-white/60">
               {filteredProducts.length} product
               {filteredProducts.length !== 1 ? "s" : ""}
             </p>
@@ -217,8 +289,10 @@ export default function ProductAccordion() {
         </div>
 
         {filteredProducts.length === 0 ? (
-          <div className="flex min-h-60 items-center justify-center rounded-2xl border border-dashed border-black/15 bg-black/5">
-            <p className="text-black/60">No products match these filters.</p>
+          <div className="flex min-h-60 items-center justify-center rounded-2xl border border-dashed border-black/15 dark:border-white/15 bg-black/5 dark:bg-white/5">
+            <p className="text-black/60 dark:text-white/60">
+              No products match these filters.
+            </p>
           </div>
         ) : (
           <>
