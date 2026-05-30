@@ -4,7 +4,7 @@ import logo from "../../../public/main/logo.png";
 
 export default function Register() {
   return (
-    <section className="mt-25 flex min-h-screen w-full items-center justify-center px-4 py-16 sm:px-6 lg:px-8">
+    <section className="mt-15 flex min-h-screen w-full items-center justify-center px-4 py-16 sm:px-6 lg:px-8">
       <div className="relative w-full max-w-xl rounded-3xl bg-background border border-border px-5 pb-8 pt-20 text-foreground shadow-2xl sm:px-8">
         {/* Logo */}
         <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full bg-background border border-border p-4 shadow-md">
@@ -143,11 +143,17 @@ export default function Register() {
             />
             <span>
               I agree to the{" "}
-              <Link href="/terms" className="font-semibold text-foreground hover:text-muted-foreground transition-colors">
+              <Link
+                href="/terms"
+                className="font-semibold text-foreground hover:text-muted-foreground transition-colors"
+              >
                 Terms & Conditions
               </Link>{" "}
               and{" "}
-              <Link href="/privacy" className="font-semibold text-foreground hover:text-muted-foreground transition-colors">
+              <Link
+                href="/privacy"
+                className="font-semibold text-foreground hover:text-muted-foreground transition-colors"
+              >
                 Privacy Policy
               </Link>
               .

@@ -43,7 +43,7 @@ export default function Nav() {
     <>
       {/* Desktop Nav */}
       <nav
-        className="fixed hidden md:flex z-50 items-center w-full 
+        className="fixed top-0 hidden md:flex z-50 items-center w-full 
        px-5 py-2 gap-3 bg-background border-b border-border shadow-sm transition-colors duration-200"
       >
         <div className="shrink-0 cursor-pointer mr-auto">

@@ -4,7 +4,7 @@ import logo from "../../../public/main/logo.png";
 
 export default function Login() {
   return (
-    <section className="flex min-h-screen w-full items-center justify-center px-4 py-16 sm:px-6 lg:px-8 lg:mt-30">
+    <section className="mt-15 flex min-h-screen w-full items-center justify-center px-4 py-16 sm:px-6 lg:px-8 lg:mt-30">
       <div className="relative w-full max-w-md rounded-3xl bg-background border border-border px-5 pb-8 pt-20 text-foreground shadow-2xl sm:px-8">
         <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full bg-background border border-border p-4 shadow-md">
           <Image
